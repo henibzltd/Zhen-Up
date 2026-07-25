@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+
+  --brand: #00bf63;
+  --brand-dark: #00a655;
+  --brand-light: #e6f9ee;
+  --ink: #0f172a;
+  --ink-soft: #334155;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-marquee: marquee 32s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--brand);
+  color: white;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
