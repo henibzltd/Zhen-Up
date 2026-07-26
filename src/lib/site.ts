@@ -18,4 +18,8 @@ export const NAV_LINKS = [
 export const SOCIAL_LINKS = [
   { href: "https://www.instagram.com/zhenupdigital/", label: "Instagram" },
   { href: "https://www.linkedin.com/company/122374612/", label: "LinkedIn" },
+  {
+    href: "https://www.facebook.com/profile.php?id=61592571387522",
+    label: "Facebook",
+  },
 ] as const;

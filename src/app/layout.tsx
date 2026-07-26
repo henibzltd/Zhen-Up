@@ -5,7 +5,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { BookingProvider } from "@/components/booking/booking-context";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
 const bodyFont = Inter({
   variable: "--font-body",
@@ -83,11 +83,7 @@ const organizationJsonLd = {
   image: `${SITE_URL}/opengraph-image`,
   priceRange: "$$",
   areaServed: "US",
-  sameAs: [
-    "https://www.instagram.com/",
-    "https://www.linkedin.com/",
-    "https://www.facebook.com/",
-  ],
+  sameAs: SOCIAL_LINKS.map((link) => link.href),
   makesOffer: [
     {
       "@type": "Offer",
