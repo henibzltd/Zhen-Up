@@ -20,7 +20,7 @@ export function Footer() {
       <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-[1.3fr_1fr_1fr]">
           <div>
-            <Logo className="[&_span]:text-white [&_span.text-ink-soft]:text-slate-400" />
+            <Logo variant="dark" />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-400">
               Performance marketing for businesses that are done guessing. We run the ads
               and build the websites — you watch the leads come in.
