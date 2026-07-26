@@ -1,10 +1,17 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { ImageResponse } from "next/og";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "ZhenUp Digital — Performance Marketing That Pays For Itself";
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const logoBuffer = await readFile(
+    path.join(process.cwd(), "public/brand/logo-icon.png"),
+  );
+  const logoSrc = `data:image/png;base64,${logoBuffer.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -22,22 +29,7 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <svg width="76" height="76" viewBox="0 0 100 100" fill="none">
-            <path
-              d="M30 24 V60 A20 20 0 0 0 70 60 V44"
-              stroke="#00bf63"
-              strokeWidth="15"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M56 50 L84 18 M84 18 L84 34 M84 18 L68 18"
-              stroke="#00bf63"
-              strokeWidth="11"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img src={logoSrc} width={76} height={89} alt="" />
           <div style={{ display: "flex", fontSize: 64, fontWeight: 800, color: "#ffffff" }}>
             Zhen<span style={{ color: "#00bf63" }}>Up</span>
             <span

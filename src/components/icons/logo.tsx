@@ -1,28 +1,16 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+import logoIcon from "../../../public/brand/logo-icon.png";
 
 export function LogoMark({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 100 100"
-      fill="none"
-      className={cn("h-8 w-8", className)}
+    <Image
+      src={logoIcon}
+      alt=""
+      priority
+      className={cn("h-8 w-auto select-none", className)}
       aria-hidden="true"
-    >
-      <path
-        d="M30 24 V60 A20 20 0 0 0 70 60 V44"
-        stroke="var(--brand)"
-        strokeWidth="15"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M56 50 L84 18 M84 18 L84 34 M84 18 L68 18"
-        stroke="var(--brand)"
-        strokeWidth="11"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    />
   );
 }
 
