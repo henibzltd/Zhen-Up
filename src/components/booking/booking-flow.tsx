@@ -2,7 +2,8 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { CalendlyEmbed } from "@/components/booking/calendly-embed";
 import { useBooking } from "@/components/booking/booking-context";
 import {
   bookingSchema,
@@ -11,6 +12,7 @@ import {
   TIMELINE_OPTIONS,
   type BookingInput,
 } from "@/lib/booking-schema";
+import { CALENDLY_URL } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const EMPATHY_COPY: Record<string, string> = {
@@ -42,11 +44,15 @@ const emptyForm: BookingInput = {
 };
 
 export function BookingFlow() {
-  const { close } = useBooking();
+  const { close, setIsScheduling } = useBooking();
   const [step, setStep] = useState<Step>(0);
   const [form, setForm] = useState<BookingInput>(emptyForm);
   const [errors, setErrors] = useState<Partial<Record<keyof BookingInput, string>>>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  useEffect(() => {
+    setIsScheduling(step === 5 && status === "success" && Boolean(CALENDLY_URL));
+  }, [step, status, setIsScheduling]);
 
   const update = <K extends keyof BookingInput>(key: K, value: BookingInput[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -97,26 +103,49 @@ export function BookingFlow() {
               key="success"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center"
+              className="flex w-full flex-col items-center"
             >
-              <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-brand-light text-brand">
-                <CheckCircle2 className="h-9 w-9" />
-              </div>
-              <h3 className="font-display text-2xl font-bold text-ink">
-                You&apos;re on the calendar.
-              </h3>
-              <p className="mt-3 max-w-sm text-ink-soft">
-                Thanks, {form.name.split(" ")[0] || "there"}. We&apos;ve got your details and
-                someone from our team will reach out within one business day to lock in a
-                time that works for you.
-              </p>
-              <button
-                type="button"
-                onClick={close}
-                className="mt-8 inline-flex h-12 items-center justify-center rounded-full bg-ink px-6 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
-              >
-                Done
-              </button>
+              {CALENDLY_URL ? (
+                <>
+                  <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-brand-light text-brand">
+                    <CheckCircle2 className="h-7 w-7" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-ink">
+                    Got it, {form.name.split(" ")[0] || "there"} — pick a time that works.
+                  </h3>
+                  <p className="mt-2 max-w-sm text-sm text-ink-soft">
+                    Choose a slot below and you&apos;re all set — no back-and-forth emails.
+                  </p>
+                  <div className="mt-4 w-full">
+                    <CalendlyEmbed
+                      url={CALENDLY_URL}
+                      name={form.name}
+                      email={form.email}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-brand-light text-brand">
+                    <CheckCircle2 className="h-9 w-9" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-ink">
+                    You&apos;re on the calendar.
+                  </h3>
+                  <p className="mt-3 max-w-sm text-ink-soft">
+                    Thanks, {form.name.split(" ")[0] || "there"}. We&apos;ve got your details
+                    and someone from our team will reach out within one business day to lock
+                    in a time that works for you.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="mt-8 inline-flex h-12 items-center justify-center rounded-full bg-ink px-6 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+                  >
+                    Done
+                  </button>
+                </>
+              )}
             </motion.div>
           ) : (
             <motion.div

@@ -12,6 +12,7 @@ export function proxy(request: NextRequest) {
     img-src 'self' blob: data:;
     font-src 'self';
     connect-src 'self';
+    frame-src 'self' https://calendly.com;
     object-src 'none';
     base-uri 'self';
     form-action 'self';

@@ -47,6 +47,11 @@ Copy `.env.example` to `.env.local` and fill in as needed:
   submissions are only logged server-side via `console.info`, which is fine
   for local development but **must** be wired up before real traffic hits
   the site in production.
+- `NEXT_PUBLIC_CALENDLY_URL` — optional. If set to a Calendly scheduling
+  link (e.g. `https://calendly.com/your-handle/consultation`), the booking
+  flow shows a live, pre-filled Calendly picker after the form is submitted
+  instead of a generic "we'll be in touch" message. Requires `frame-src`
+  for `calendly.com` in the CSP (`src/proxy.ts`), already configured.
 
 ## Security
 

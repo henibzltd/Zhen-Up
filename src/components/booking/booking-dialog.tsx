@@ -5,9 +5,10 @@ import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useBooking } from "@/components/booking/booking-context";
 import { BookingFlow } from "@/components/booking/booking-flow";
+import { cn } from "@/lib/utils";
 
 export function BookingDialog() {
-  const { isOpen, close } = useBooking();
+  const { isOpen, close, isScheduling } = useBooking();
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,7 +50,10 @@ export function BookingDialog() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex max-h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:max-h-[88vh] sm:rounded-3xl"
+            className={cn(
+              "relative flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl transition-[max-width] duration-300 sm:max-h-[88vh] sm:rounded-3xl",
+              isScheduling ? "max-w-3xl" : "max-w-xl",
+            )}
           >
             <button
               type="button"

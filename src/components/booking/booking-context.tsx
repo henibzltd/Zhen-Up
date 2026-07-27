@@ -7,17 +7,26 @@ type BookingContextValue = {
   isOpen: boolean;
   open: () => void;
   close: () => void;
+  isScheduling: boolean;
+  setIsScheduling: (value: boolean) => void;
 };
 
 const BookingContext = createContext<BookingContextValue | null>(null);
 
 export function BookingProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScheduling, setIsScheduling] = useState(false);
 
   const open = useCallback(() => setIsOpen(true), []);
-  const close = useCallback(() => setIsOpen(false), []);
+  const close = useCallback(() => {
+    setIsOpen(false);
+    setIsScheduling(false);
+  }, []);
 
-  const value = useMemo(() => ({ isOpen, open, close }), [isOpen, open, close]);
+  const value = useMemo(
+    () => ({ isOpen, open, close, isScheduling, setIsScheduling }),
+    [isOpen, open, close, isScheduling],
+  );
 
   return (
     <BookingContext.Provider value={value}>
