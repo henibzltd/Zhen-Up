@@ -6,6 +6,7 @@ import {
   TIMELINE_OPTIONS,
 } from "@/lib/booking-schema";
 import { isRateLimited } from "@/lib/rate-limit";
+import { SITE_URL } from "@/lib/site";
 
 export const runtime = "nodejs";
 
@@ -22,7 +23,27 @@ function getClientIp(request: NextRequest): string {
   return request.headers.get("x-real-ip") ?? "unknown";
 }
 
+/**
+ * Browsers always attach a same-origin-or-not `Origin` header on POST
+ * requests and never let page JS forge it, so this reliably blocks a
+ * malicious site from using a visitor's browser to submit this form —
+ * unlike CORS response headers, which only ever restrict what JS can
+ * *read back*, not what gets sent. Non-browser clients (curl, server-to-
+ * server) don't send Origin at all, so this can't be the only line of
+ * defense — rate limiting, the honeypot, and Zod validation cover those.
+ */
+function hasValidOrigin(request: NextRequest): boolean {
+  const origin = request.headers.get("origin");
+  if (!origin) return true;
+  if (process.env.NODE_ENV === "development") return true;
+  return origin === SITE_URL;
+}
+
 export async function POST(request: NextRequest) {
+  if (!hasValidOrigin(request)) {
+    return NextResponse.json({ ok: false, error: "Forbidden origin." }, { status: 403 });
+  }
+
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {
     return NextResponse.json({ ok: false, error: "Unsupported content type." }, { status: 415 });
@@ -31,7 +52,7 @@ export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
   if (isRateLimited(ip)) {
     return NextResponse.json(
-      { ok: false, error: "Too many requests. Please try again in a minute." },
+      { ok: false, error: "Too many requests. Please try again in a few minutes." },
       { status: 429 },
     );
   }
