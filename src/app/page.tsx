@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { Faq } from "@/components/sections/faq";
 import { FinalCta } from "@/components/sections/final-cta";
+import { Guarantee } from "@/components/sections/guarantee";
 import { Hero } from "@/components/sections/hero";
 import { PainPoints } from "@/components/sections/pain-points";
 import { Process } from "@/components/sections/process";
@@ -37,6 +38,7 @@ export default async function Home() {
       <Services />
       <Process />
       <Trust />
+      <Guarantee />
       <Faq />
       <FinalCta />
     </>
